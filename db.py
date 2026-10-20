@@ -45,7 +45,7 @@ def load_matches():
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
 
-    cursor.execute("SELECT * FROM matches")
+    cursor.execute("SELECT * FROM matches ORDER BY id ASC")
     rows = cursor.fetchall()
 
     matches = [dict(row) for row in rows]

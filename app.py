@@ -6,7 +6,10 @@ from main import (
     calculate_season_hitting_percentage
 )
 from db import initialize_database, save_match, load_matches, delete_match
+import pandas as pd
 initialize_database()
+
+
 st.title("🏐 VolleyTrack")
 st.write("Record and analyze volleyball matches.")
 
@@ -127,3 +130,39 @@ if len(saved_matches) > 0:
             st.metric("Season Hitting Percentage", f"{season_hitting_percentage:.3f}")
 else:
     st.info("No matches recorded yet. Save a match to see season statistics.")
+
+
+st.subheader("Performance Trends")
+
+statistic = st.selectbox(
+    "Statistic",
+    ["Hitting Percentage", "Assists Per Set", "Kills", "Digs", "Aces"]
+)
+
+chart_data = []
+
+for i, match in enumerate(saved_matches, start=1):
+    if statistic == "Hitting Percentage":
+        value = calculate_hitting_percentage(match)
+    elif statistic == "Assists Per Set":
+        value = calculate_assists_per_set(match)
+    elif statistic == "Kills":
+        value = match["kills"]
+    elif statistic == "Digs":
+        value = match["digs"]
+    elif statistic == "Aces":
+        value = match["aces"]
+
+    if value is not None:
+        chart_data.append({"Match Number": i, statistic: value})
+
+if len(chart_data) >= 2:
+    chart_df = pd.DataFrame(chart_data)
+
+    st.line_chart(
+        chart_df,
+        x="Match Number",
+        y=statistic
+    )
+else:
+    st.info("At least two matches with valid data are needed to display this chart.")

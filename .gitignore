@@ -1,0 +1,18 @@
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# SQLite database
+volleytrack.db
+volleytrack.db-journal
+volleytrack.db-wal
+volleytrack.db-shm
+
+# Environment variables
+.env
+
+# Editor files
+.vscode/
